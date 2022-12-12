@@ -4,8 +4,10 @@ import cv2
 from PIL import Image
 from datetime import datetime,date
 import numpy as np
+# import pandas as pd
 import pandas as pd
-
+import requests
+import io
 face_cascade = cv2.CascadeClassifier('haarcascade_default.xml')
 
 rec=cv2.face.LBPHFaceRecognizer_create()
@@ -59,19 +61,35 @@ def detect_faces(our_image):
     return img
 
 def markAttendance(name):
-  with open('Attendance.csv','r+') as f:
-    myDataList = f.readlines()
-    nameList = []
-    for line in myDataList:
-      entry = line.split(',')
-      nameList.append(entry[0])
-    if name not in nameList:
-      now = datetime.now()
-      today = date.today()
-# print("Today's date:", today)
-      dtString = now.strftime('%H:%M:%S')
-      # date = now.today('%d%b%Y%H%M%S')
-      f.writelines(f'\n{name},{dtString},{today}')
+    url = "https://github.com/sahoorajesh/test/blob/master/Attendance.csv" # Make sure the url is the raw version of the file on GitHub
+    download = requests.get(url).content
+
+    # Reading the downloaded content and turning it into a pandas dataframe
+
+    df = pd.read_csv(io.StringIO(download.decode('utf-8')))
+    now = datetime.now()
+    today = date.today()
+    dtString = now.strftime('%H:%M:%S')
+
+    df1 = pd.DataFrame({'name': [{name}],
+                   'date': [{dtString}],
+                   'timestamp': [{today}]})
+
+    df1.to_csv(df, mode='a', index=False, header=False)
+    print(df1)
+#   with open('Attendance.csv','r+') as f:
+#     myDataList = f.readlines()
+#     nameList = []
+#     for line in myDataList:
+#       entry = line.split(',')
+#       nameList.append(entry[0])
+#     if name not in nameList:
+    #   now = datetime.now()
+    #   today = date.today()
+# # print("Today's date:", today)
+    #   dtString = now.strftime('%H:%M:%S')
+#       # date = now.today('%d%b%Y%H%M%S')
+#       f.writelines(f'\n{name},{dtString},{today}')
 
 def main():
     """Face Recognition App"""
