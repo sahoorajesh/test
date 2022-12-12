@@ -59,7 +59,7 @@ def detect_faces(our_image):
     return img
 
 def markAttendance(name):
-  with open('Attendance.csv','r+') as f:
+  with open('https://github.com/sahoorajesh/test/blob/master/Attendance.csv','r+') as f:
     myDataList = f.readlines()
     nameList = []
     for line in myDataList:
