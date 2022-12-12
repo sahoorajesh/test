@@ -113,7 +113,7 @@ def main():
     st.markdown(html_temp, unsafe_allow_html=True)
 
     image_file = st.file_uploader("Upload Image", type=['jpg', 'png', 'jpeg'])
-    uploaded_file = st.file_uploader('Choose a csv file', type='csv')
+    uploaded_file = st.file_uploader('Choose a csv file')
     if uploaded_file:
         st.markdown('---')
         df = pd.read_excel(uploaded_file, engine='openpyxl')
