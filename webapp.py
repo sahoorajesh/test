@@ -4,7 +4,7 @@ import cv2
 from PIL import Image
 from datetime import datetime,date
 import numpy as np
-
+import pandas as pd
 
 face_cascade = cv2.CascadeClassifier('haarcascade_default.xml')
 
@@ -94,6 +94,11 @@ def main():
     st.markdown(html_temp, unsafe_allow_html=True)
 
     image_file = st.file_uploader("Upload Image", type=['jpg', 'png', 'jpeg'])
+    uploaded_file = st.file_uploader('Choose a XLSX file', type='xlsx')
+    if uploaded_file:
+        st.markdown('---')
+        df = pd.read_excel(uploaded_file, engine='openpyxl')
+        st.dataframe(df)
     if image_file is not None:
         our_image = Image.open(image_file)
         st.text("Original Image")
