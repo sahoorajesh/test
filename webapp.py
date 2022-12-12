@@ -66,7 +66,7 @@ def markAttendance(name,uploaded_file):
 
     # # Reading the downloaded content and turning it into a pandas dataframe
 
-    df = pd.read_csv(uploaded_file)
+    df = pd.read_excel(uploaded_file.read(), engine='openpyxl')
     now = datetime.now()
     today = date.today()
     dtString = now.strftime('%H:%M:%S')
@@ -75,8 +75,7 @@ def markAttendance(name,uploaded_file):
                    'date': [{dtString}],
                    'timestamp': [{today}]})
 
-    df1.to_csv(df, mode='a', index=False, header=False)
-    print(df)
+    df1.to_excel(df, mode='a', index=False, header=False)
     print(df1)
 #   with open('Attendance.csv','r+') as f:
 #     myDataList = f.readlines()
@@ -113,7 +112,7 @@ def main():
     st.markdown(html_temp, unsafe_allow_html=True)
 
     image_file = st.file_uploader("Upload Image", type=['jpg', 'png', 'jpeg'])
-    uploaded_file = st.file_uploader('Choose a csv file', type={"csv", "txt"})
+    uploaded_file = st.file_uploader('Choose a XLSX file', type='xlsx')
     if uploaded_file:
         st.markdown('---')
         df = pd.read_excel(uploaded_file, engine='openpyxl')
