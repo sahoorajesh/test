@@ -70,13 +70,13 @@ def markAttendance(name,uploaded_file):
     now = datetime.now()
     today = date.today()
     dtString = now.strftime('%H:%M:%S')
+    print(df)
+    # df1 = pd.DataFrame({'name': [{name}],
+    #                'date': [{dtString}],
+    #                'timestamp': [{today}]})
 
-    df1 = pd.DataFrame({'name': [{name}],
-                   'date': [{dtString}],
-                   'timestamp': [{today}]})
-
-    df1.to_excel(df, mode='a', index=False, header=False)
-    print(df1)
+    # df1.to_excel(df, mode='a', index=False, header=False)
+    # print(df1)
 #   with open('Attendance.csv','r+') as f:
 #     myDataList = f.readlines()
 #     nameList = []
