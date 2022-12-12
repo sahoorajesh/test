@@ -12,7 +12,7 @@ face_cascade = cv2.CascadeClassifier('haarcascade_default.xml')
 
 rec=cv2.face.LBPHFaceRecognizer_create()
 rec.read("trainingData.yml")
-def detect_faces(our_image):
+def detect_faces(our_image,uploaded_file):
     img = np.array(our_image.convert('RGB'))
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     # Detect faces
@@ -34,25 +34,25 @@ def detect_faces(our_image):
                 
             if(id==2):
                 name = "Dhoni"
-                markAttendance(name)
+                markAttendance(name,uploaded_file)
                 cv2.putText(img, name, (x, y + h), cv2.FONT_HERSHEY_COMPLEX_SMALL, 2.0, (255, 255, 255),2)
             elif(id==6):
                 name = "Kohli"
-                markAttendance(name)
+                markAttendance(name,uploaded_file)
                 cv2.putText(img, name, (x, y + h), cv2.FONT_HERSHEY_COMPLEX_SMALL, 2.0, (255, 255, 255),2)
             elif(id==8):
                 name = "Dashmesh"
-                markAttendance(name)
+                markAttendance(name,uploaded_file)
                 cv2.putText(img, name, (x, y + h), cv2.FONT_HERSHEY_COMPLEX_SMALL, 2.0, (255, 255, 255),2)
          
             elif(id==4):
                 name = "Messi"
-                markAttendance(name)
+                markAttendance(name,uploaded_file)
                 cv2.putText(img, name, (x, y + h), cv2.FONT_HERSHEY_COMPLEX_SMALL, 2.0, (255, 255, 255),2)
 
             elif(id==10):
                 name = "Adishwar"
-                markAttendance(name)
+                markAttendance(name,uploaded_file)
                 cv2.putText(img, name, (x, y + h), cv2.FONT_HERSHEY_COMPLEX_SMALL, 2.0, (255, 255, 255),2)
         else:
             cv2.putText(img, name, (x, y + h), cv2.FONT_HERSHEY_COMPLEX_SMALL, 2.0, (255, 255, 255),2)
@@ -60,13 +60,13 @@ def detect_faces(our_image):
 
     return img
 
-def markAttendance(name):
-    url = "https://github.com/sahoorajesh/test/blob/master/Attendance.csv" # Make sure the url is the raw version of the file on GitHub
-    download = requests.get(url).content
+def markAttendance(name,uploaded_file):
+    # url = "https://github.com/sahoorajesh/test/blob/master/Attendance.csv" # Make sure the url is the raw version of the file on GitHub
+    # download = requests.get(url).content
 
-    # Reading the downloaded content and turning it into a pandas dataframe
+    # # Reading the downloaded content and turning it into a pandas dataframe
 
-    df = pd.read_csv(io.StringIO(download.decode('utf-8')))
+    df = pd.read_csv(uploaded_file)
     now = datetime.now()
     today = date.today()
     dtString = now.strftime('%H:%M:%S')
@@ -76,6 +76,7 @@ def markAttendance(name):
                    'timestamp': [{today}]})
 
     df1.to_csv(df, mode='a', index=False, header=False)
+    print(df)
     print(df1)
 #   with open('Attendance.csv','r+') as f:
 #     myDataList = f.readlines()
@@ -112,7 +113,7 @@ def main():
     st.markdown(html_temp, unsafe_allow_html=True)
 
     image_file = st.file_uploader("Upload Image", type=['jpg', 'png', 'jpeg'])
-    uploaded_file = st.file_uploader('Choose a XLSX file', type='xlsx')
+    uploaded_file = st.file_uploader('Choose a csv file', type='csv')
     if uploaded_file:
         st.markdown('---')
         df = pd.read_excel(uploaded_file, engine='openpyxl')
@@ -123,7 +124,7 @@ def main():
         st.image(our_image)
 
     if st.button("Mark Attendance"):
-        result_img= detect_faces(our_image)
+        result_img= detect_faces(our_image,uploaded_file)
         st.image(result_img)
 
 
